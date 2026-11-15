@@ -135,7 +135,8 @@ async function handleFeedbackSubmit(e) {
       alert("Error saving submission on server.");
     }
   } catch (err) {
-    alert("Could not connect to backend server.");
+    console.error("ERROR:", err);
+    alert("Could not connect to backend server: " + err.message);
   }
 }
 
