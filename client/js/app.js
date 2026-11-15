@@ -123,7 +123,10 @@ async function handleFeedbackSubmit(e) {
   };
 
   try {
-    const res = await fetch('/api/results', {
+    // Construct target URL using current host and port (stripping user credentials)
+    const targetUrl = new URL('/api/results', window.location.protocol + '//' + window.location.host);
+
+    const res = await fetch(targetUrl.href, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
@@ -132,11 +135,12 @@ async function handleFeedbackSubmit(e) {
     if (res.ok) {
       showStep('step-complete');
     } else {
-      alert("Error saving submission on server.");
+      const errText = await res.text();
+      alert(`Server returned HTTP ${res.status}: ${errText}`);
     }
   } catch (err) {
-    console.error("ERROR:", err);
-    alert("Could not connect to backend server: " + err.message);
+    alert(`FETCH ERROR: ${err.name} - ${err.message}`);
+    console.error(err);
   }
 }
 
