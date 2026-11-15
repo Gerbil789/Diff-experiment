@@ -1,0 +1,7 @@
+.vscode/
+uploads/
+results/
+logs/
+server/build/
+*.log
+LOG.md
