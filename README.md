@@ -16,3 +16,11 @@ make -j$(nproc)
 ```
 ./server/build/server
 ```
+
+or
+
+```
+nohup ./server/build/server > server.log 2>&1 &
+```
+
+to keep it running

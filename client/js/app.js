@@ -132,10 +132,10 @@ async function handleFeedbackSubmit(e) {
     if (res.ok) {
       showStep('step-complete');
     } else {
-      alert("Error saving submission.");
+      alert("Error saving submission on server.");
     }
   } catch (err) {
-    alert("Could not connect to backend server on port 8080.");
+    alert("Could not connect to backend server.");
   }
 }
 
@@ -148,18 +148,20 @@ function showStep(stepId) {
 function renderUnified(orig, mod) {
   const o = orig.trim().split('\n');
   const m = mod.trim().split('\n');
-  let html = `<div class="border border-slate-300 rounded bg-slate-900 text-slate-100 p-4 leading-relaxed">`;
+  let html = `<div class="border border-slate-300 rounded bg-slate-900 text-slate-100 p-4 leading-relaxed font-mono text-xs md:text-sm">`;
+  
   let i = 0, j = 0;
   while (i < o.length || j < m.length) {
     if (i < o.length && j < m.length && o[i] === m[j]) {
       html += `<div class="text-slate-300">  ${escapeHtml(o[i])}</div>`;
-      i++; j++;
+      i++;
+      j++;
     } else {
-      if (i < o.length && !m.includes(o[i])) {
+      if (i < o.length && (j >= m.length || o[i] !== m[j])) {
         html += `<div class="bg-rose-950 text-rose-300">- ${escapeHtml(o[i])}</div>`;
         i++;
       }
-      if (j < m.length && !o.includes(m[j])) {
+      if (j < m.length && (i >= o.length || o[i - 1] !== m[j])) {
         html += `<div class="bg-emerald-950 text-emerald-300">+ ${escapeHtml(m[j])}</div>`;
         j++;
       }
@@ -181,7 +183,7 @@ function renderSideBySide(orig, mod) {
     right += `<div class="${diff && rLine ? 'bg-emerald-950 text-emerald-300' : 'text-slate-300'} px-2 py-0.5">${escapeHtml(rLine)}</div>`;
   }
   return `
-    <div class="grid grid-cols-2 gap-2 border border-slate-300 rounded bg-slate-900 text-slate-100 p-4 text-xs md:text-sm">
+    <div class="grid grid-cols-2 gap-2 border border-slate-300 rounded bg-slate-900 text-slate-100 p-4 font-mono text-xs md:text-sm">
       <div><div class="text-slate-500 border-b border-slate-700 pb-1 mb-2 font-bold uppercase">Before</div>${left}</div>
       <div><div class="text-slate-500 border-b border-slate-700 pb-1 mb-2 font-bold uppercase">After</div>${right}</div>
     </div>`;
